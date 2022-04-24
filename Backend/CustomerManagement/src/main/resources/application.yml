@@ -1,0 +1,17 @@
+
+server:
+  port: 9000
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://jwt:jwt@jwt.v3dke.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name : Customer-Service
+  main:
+   allow:
+    circular:
+      references: true

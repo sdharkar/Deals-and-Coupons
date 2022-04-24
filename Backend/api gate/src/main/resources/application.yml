@@ -1,0 +1,83 @@
+server:
+    port: 8000
+
+eureka:
+    client:
+        register-with-eureka: true
+        fetch-registry: true
+        service-url:
+            defaultZone: http://localhost:8761/eureka/
+    instance:
+        hostname: localhost
+
+spring:
+    application:
+        name: api-gateway
+        
+    cloud:
+        gateway:
+            routes:
+                - id: coupon-service
+                  uri: http://localhost:8083/coupon-service/
+                  predicates:
+                    - Path=/coupon/**
+                #   filters:
+                #     - name: CircuitBreaker
+                #       args:
+                #         name: customer-service  
+                #         fallbackuri: forward:/customerServiceFallback
+
+                - id: admin-service
+                  uri: http://localhost:8085/admin-service/
+                  predicates:
+                    - Path=/admin/**
+                #   filters:
+                #     - name: CircuitBreaker
+                #       args:
+                #         name: product-service  
+                #         fallbackuri: forward:/productServiceFallback
+
+                - id: customer-service
+                  uri: http://localhost:9000/customer-service/
+                  predicates:
+                    - Path=/customer/**
+                #   filters:
+                #     - name: CircuitBreaker
+                #       args:
+                #         name: product-service  
+                #         fallbackuri: forward:/productServiceFallback
+
+                # user-management-service
+                #- id: user-management-service
+                 # uri: lb://user-management-service
+                  #predicates:
+                   # - Path=/**
+                #   filters:
+                #     - name: CircuitBreaker
+                #       args:
+                #         name: product-service  
+                #         fallbackuri: forward:/productServiceFallback
+
+                #- id: booking-details-service
+                 # uri: lb://booking-details-service
+                  #predicates:
+                   # - Path=/api/booking/**
+                #   filters:
+                #     - name: CircuitBreaker
+                #       args:
+                #         name: product-service  
+                #         fallbackuri: forward:/productServiceFallback
+
+# hystrix:
+#     command:
+#         fallbackcmd:
+#             execution:
+#                 isolation:
+#                     thread:
+#                         timeoutInMillieseconds: 5000
+
+# management:
+#     endpoints:
+#         web:
+#             exposure:
+#                 include: hystrix.stream
